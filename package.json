@@ -10,6 +10,8 @@
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@next-auth/mongodb-adapter": "^1.0.3",
+    "bcryptjs": "^2.4.3",
     "mongodb": "^4.6.0",
     "next": "latest",
     "next-auth": "^4.3.4",
