@@ -1,35 +1,35 @@
-import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { getProviders } from "next-auth/react"
-import FormAuth from '../components/auth/';
+import FormAuth from '../components/auth/'
+import Loading from '../components/Loading'
 
 function AuthPage({providers}) {
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     getSession().then((session) => {
       if (session) {
-        router.replace('/');
+        router.replace('/logged')
       } else {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    });
-  }, [router]);
+    })
+  }, [router])
 
   if (isLoading) {
-    return <p>Carregando...</p>;
+    return <Loading />
   }
 
-  return <FormAuth providers={providers}/>;
+  return <FormAuth providers={providers}/>
 }
 
-export default AuthPage;
+export default AuthPage
 
 export async function getServerSideProps(_) {
   const providers = await getProviders()
-  console.log(providers);
   return {
     props: { 
       providers

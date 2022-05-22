@@ -9,8 +9,8 @@ const ContinueButton = () => {
         <div className="mr-auto ml-auto w-full">
           <div className="w-full max-w-md mr-auto ml-auto mt-4 mb-1 text-center">
             <Link href="/auth">
-              <button type="button" className="text-4xl font-montserrat font-semibold text-violet-600 text-sm py-1 text-center rounded text-center focus:outline-none">             
-                  <a className="no-underline">Continuar</a><p><FontAwesomeIcon icon={faArrowDown}/></p>
+              <button type="button" className="font-montserrat font-semibold text-violet-600 text-sm py-1 text-center rounded text-center focus:outline-none">             
+                  <a className="no-underline text-6xl">Continuar</a><p><FontAwesomeIcon icon={faArrowDown} className="no-underline text-5xl"/></p>
               </button>
             </Link>
           </div>

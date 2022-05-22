@@ -1,8 +1,8 @@
 import { faGoogle, faFacebookF } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { signIn } from "next-auth/react"
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import Image from "next/image"
 import Link from "next/link"
 
@@ -13,62 +13,63 @@ async function CreateUser(email, password) {
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || 'Alguma coisa deu errado!');
+    throw new Error(data.message || 'Alguma coisa deu errado!')
   }
 
-  return data;
+  return data
 }
 
 
 const FormAuth = ({providers}) => {
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-  const [isLogin, setIsLogin] = useState(true);
-  const router = useRouter();
+  const emailInputRef = useRef()
+  const passwordInputRef = useRef()
+  const [isLogin, setIsLogin] = useState(true)
+  const router = useRouter()
 
   function switchAuthModeHandler() {
-    setIsLogin((prevState) => !prevState);
+    setIsLogin((prevState) => !prevState)
   }
 
   async function submitHandler(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
+    const enteredEmail = emailInputRef.current.value
+    const enteredPassword = passwordInputRef.current.value
 
     if (isLogin) {
       const result = await signIn('credentials', {
         redirect: false,
         email: enteredEmail,
         password: enteredPassword,
-      });
+      })
 
       if (!result.error) {
-        router.replace('/user');
+        router.replace('/user')
       }
     } else {
       try {
-        const result = await CreateUser(enteredEmail, enteredPassword);
-        console.log(result);
+        const result = await CreateUser(enteredEmail, enteredPassword)
+        console.log(result)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     }
   }
 
   return (
-    <form onSubmit={submitHandler}>
-      <div className="w-screen h-screen bg-gradient-to-r from-slate-300 to-slate-100">
-        <div className="relative font-medium h-screen flex items-center content-center justify-center">
-          <div className="mr-auto ml-auto w-full">
-            <div className="w-full max-w-md mr-auto ml-auto mt-4 mb-1 text-center">
-            <Image src={"/logo.png"} width={128} height={128}/>
-            </div>
+    
+    <div className="w-screen h-screen bg-gradient-to-r from-slate-300 to-slate-100">
+      <div className="relative font-medium h-screen flex items-center content-center justify-center">
+        <div className="mr-auto ml-auto w-full">
+          <div className="w-full max-w-md mr-auto ml-auto mt-4 mb-1 text-center">
+          <Image src={"/logo.png"} width={128} height={128}/>
+          </div>
+          <form onSubmit={submitHandler}>
             <div className="w-full max-w-md mr-auto ml-auto mt-4">
               <div className="rounded-md px-8 py-8 mb-4 ml-auto mr-auto">
                 <div className="mb-4">
@@ -91,7 +92,7 @@ const FormAuth = ({providers}) => {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <button type="button" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all">
+                  <button type="button" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all" onClick={() => signIn("credentials")}>
                     Continuar
                   </button>
                 </div>
@@ -105,14 +106,14 @@ const FormAuth = ({providers}) => {
                   provider.id === 'credentials' ? null : (
                       <button key={provider.name} type="button" className="relative border-solid border shadow-sm border-slate-400
                       font-semibold text-violet-600 text-sm py-1 text-center rounded text-center w-full
-                      focus:outline-none hover:border-violet-600 transition-all duration-200" onClick={switchAuthModeHandler}>
+                      focus:outline-none hover:border-violet-600 transition-all duration-200" onClick={() => signIn(provider.id)}>
                         {(() => {
                           switch (provider.id) {
-                            case 'google':
+                            case "google":
                             return (
                               <FontAwesomeIcon icon={faGoogle} />
                             )
-                            case 'facebook':
+                            case "facebook":
                             return (
                               <FontAwesomeIcon icon={faFacebookF} />
                             )
@@ -121,37 +122,15 @@ const FormAuth = ({providers}) => {
                         )()}
                       </button>
                     )
-                  ))}
+                  ))}            
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-    </form>
+    </div>
   )
 }
-
-const onFormSubmit = async (e) => {
-  e.preventDefault();
-  const email = emailRef.current.value;
-  const password = passwordRef.current.value;
-  if (!email || !email.includes('@') || !password) {
-      alert('Invalid details');
-      return;
-  }
-  const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-          email: email,
-          password: password,
-      }),
-  });
-  const data = await res.json();
-  console.log(data);
-};
 
 export default FormAuth
