@@ -5,6 +5,8 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../../../lib/mongodb"
 import { compare } from 'bcryptjs'
 import CredentialsProvider from "next-auth/providers/credentials";
+import { MongoClient } from "mongodb"
+
 
 export default NextAuth({
   session: {

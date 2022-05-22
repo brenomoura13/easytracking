@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb'
 import { hash } from 'bcryptjs'
+
 async function handler(req, res) {
     if (req.method === 'POST') {
         const { email, password } = req.body
@@ -13,14 +14,14 @@ async function handler(req, res) {
         )
         const db = client.db()
         const checkExisting = await db
-            .collection('cadastros')
+            .collection('accounts')
             .findOne({ email: email })
         if (checkExisting) {
             res.status(422).json({ message: 'Este usuário já existe.' })
             client.close()
             return
         }
-        const status = await db.collection('users').insertOne({
+        const status = await db.collection('accounts').insertOne({
             email,
             password: await hash(password, 12),
         })

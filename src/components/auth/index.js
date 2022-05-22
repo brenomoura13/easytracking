@@ -28,7 +28,7 @@ async function CreateUser(email, password) {
 const FormAuth = ({providers}) => {
   const emailInputRef = useRef()
   const passwordInputRef = useRef()
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(false)
   const router = useRouter()
 
   function switchAuthModeHandler() {
@@ -49,12 +49,12 @@ const FormAuth = ({providers}) => {
       })
 
       if (!result.error) {
-        router.replace('/user')
+        router.replace('/logged')
       }
     } else {
       try {
         const result = await CreateUser(enteredEmail, enteredPassword)
-        console.log(result)
+        console.log(result);
       } catch (error) {
         console.log(error)
       }
@@ -92,7 +92,7 @@ const FormAuth = ({providers}) => {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <button type="button" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all" onClick={() => signIn("credentials")}>
+                  <button type="submit" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all" onClick={switchAuthModeHandler}>
                     Continuar
                   </button>
                 </div>
