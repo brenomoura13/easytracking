@@ -23,7 +23,7 @@ async function handler(req, res) {
         }
         const status = await db.collection('accounts').insertOne({
             email,
-            password: await hashPassword(password, 12),
+            password: await hashPassword(password),
         })
         res.status(201).json({ status: 201, message: 'Usuário criado.', ...status })
         client.close()

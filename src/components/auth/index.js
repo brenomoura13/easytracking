@@ -43,7 +43,14 @@ const FormAuth = ({ providers }) => {
       case 422:
         break
       case 201:
-        await signIn('credentials')
+        const login2 = await signIn('credentials', {
+          redirect: true,
+          email: enteredEmail,
+          password: enteredPassword,
+        })
+        if (!login2?.error) {
+          router.replace('/logged')
+        }
         break
       }
   }
@@ -65,7 +72,7 @@ const FormAuth = ({ providers }) => {
                 </div>
                 <div className="mb-6">
                   <label className="block text-violet-900 text-sm font-medium mb-2" htmlFor="password">Senha</label>
-                  <input required ref={passwordInputRef} className="shadow-sm appearance-none border border-slate-400 rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none focus:border-indigo-300" id="password" type="password" placeholder="***************" />
+                  <input required ref={passwordInputRef} pattern="^([a-zA-Z0-9@*#]{8,15})$" className="shadow-sm appearance-none border border-slate-400 rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none focus:border-indigo-300" id="password" type="password" placeholder="***************" />
                 </div>
                 <div className="mb-6">
                   <div className="grid sm:grid-cols-2 gap-4">
