@@ -1,34 +1,34 @@
 import { MongoClient } from 'mongodb'
-import { hash } from 'bcryptjs'
+import { hashPassword } from '../../../lib/auth'
 
 async function handler(req, res) {
     if (req.method === 'POST') {
         const { email, password } = req.body
         if (!email || !email.includes('@') || !password) {
-            res.status(422).json({ message: 'Algum dos campos está inválido.' })
+            res.status(422).json({ status: 422, message: 'Algum dos campos está inválido.' })
             return
         }
         const client = await MongoClient.connect(
             process.env.MONGODB_URI,
             { useNewUrlParser: true, useUnifiedTopology: true }
         )
-        const db = client.db()
+        let db = client.db()
         const checkExisting = await db
             .collection('accounts')
             .findOne({ email: email })
         if (checkExisting) {
-            res.status(422).json({ message: 'Este usuário já existe.' })
+            res.status(409).json({ status: 409, message: 'Esse usuário já existe.' })
             client.close()
             return
         }
         const status = await db.collection('accounts').insertOne({
             email,
-            password: await hash(password, 12),
+            password: await hashPassword(password, 12),
         })
-        res.status(201).json({ message: 'Usuário criado.', ...status })
+        res.status(201).json({ status: 201, message: 'Usuário criado.', ...status })
         client.close()
     } else {
-        res.status(500).json({ message: 'Rota inválida.' })
+        res.status(500).json({ status: 500, message: 'Rota inválida.' })
     }
 }
 

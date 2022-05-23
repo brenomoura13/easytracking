@@ -1,7 +1,7 @@
 import { faGoogle, faFacebookF } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { signIn } from "next-auth/react"
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import Image from "next/image"
 import Link from "next/link"
@@ -14,51 +14,38 @@ async function CreateUser(email, password) {
       'Content-Type': 'application/json',
     },
   })
-
   const data = await response.json()
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Alguma coisa deu errado!')
-  }
-
   return data
 }
 
 
-const FormAuth = ({providers}) => {
+const FormAuth = ({ providers }) => {
   const emailInputRef = useRef()
   const passwordInputRef = useRef()
-  const [isLogin, setIsLogin] = useState(false)
   const router = useRouter()
-
-  function switchAuthModeHandler() {
-    setIsLogin((prevState) => !prevState)
-  }
 
   async function submitHandler(event) {
     event.preventDefault()
-
     const enteredEmail = emailInputRef.current.value
     const enteredPassword = passwordInputRef.current.value
-
-    if (isLogin) {
-      const result = await signIn('credentials', {
-        redirect: false,
-        email: enteredEmail,
-        password: enteredPassword,
-      })
-
-      if (!result.error) {
-        router.replace('/logged')
+    const result = await CreateUser(enteredEmail, enteredPassword)
+    switch (result.status) {
+      case 409:
+        const login = await signIn('credentials', {
+          redirect: true,
+          email: enteredEmail,
+          password: enteredPassword,
+        })
+        if (!login?.error) {
+          router.replace('/logged')
+        }
+        break
+      case 422:
+        break
+      case 201:
+        await signIn('credentials')
+        break
       }
-    } else {
-      try {
-        const result = await CreateUser(enteredEmail, enteredPassword)
-        console.log(result);
-      } catch (error) {
-        console.log(error)
-      }
-    }
   }
 
   return (
@@ -92,7 +79,7 @@ const FormAuth = ({providers}) => {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <button type="submit" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all" onClick={switchAuthModeHandler}>
+                  <button type="submit" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-full hover:bg-tertiary duration-200 transition-all">
                     Continuar
                   </button>
                 </div>

@@ -8,9 +8,9 @@ import Loading from '../components/Loading'
 function AuthPage({providers}) {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-
   useEffect(() => {
     getSession().then((session) => {
+      console.log(session);
       if (session) {
         router.replace('/logged')
       } else {

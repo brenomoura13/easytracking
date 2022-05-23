@@ -3,14 +3,14 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../../../lib/mongodb"
-import { compare } from 'bcryptjs'
+import { verifyPassword } from '../../../lib/auth'
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoClient } from "mongodb"
 
 
 export default NextAuth({
   session: {
-    jwt: true, 
+    strategy: "jwt" 
   },
   
   adapter: MongoDBAdapter(clientPromise),
@@ -24,12 +24,17 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
     }),
     CredentialsProvider({
-      async authorize(credentials) {
+      credentials: {
+        email: { label: "Email", type: "text", placeholder: "Breno" },
+        password: {  label: "Password", type: "password" }
+      },
+      async authorize(credentials) {  
         const client = await MongoClient.connect(
           process.env.MONGODB_URI,
           { useNewUrlParser: true, useUnifiedTopology: true }
           )
-          const users = await client.db().collection('cadastros')
+          let db = client.db()
+          const users = await db.collection('accounts')
           const result = await users.findOne({
             email: credentials.email,
           })
@@ -37,7 +42,7 @@ export default NextAuth({
             client.close()
             throw new Error('Nenhum usuário encontrado com este e-mail.')
           }
-          const checkPassword = await compare(credentials.passowrd, result.passowrd)
+          const checkPassword = await verifyPassword(credentials.password, result.password)
           if (!checkPassword) {
             client.close()
             throw new Error('Senha não confere.')
@@ -48,6 +53,6 @@ export default NextAuth({
       }),
     ],
     pages: {
-      signIn: "/",
+      signIn: "/auth",
     }
   })
