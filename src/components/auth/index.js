@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import Link from "next/link"
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 
 async function CreateUser(email, password) {
   const response = await fetch("/api/auth/signup", {
@@ -61,7 +62,7 @@ const FormAuth = ({ providers }) => {
       .min(6, "Senha deve ter no mínimo 6 caracteres.")
       .max(20, "Senha deve ter no máximo 20 caracteres.")
       .required("Senha é obrigatória.")
-      .matches("^([a-zA-Z0-9@*#]{6,20})$", "Senha precisa conter: Uma letra maiúscula, uma caractere especial, no mínimo de 6 caracteres e no máximo 20."),
+      .matches(/^([a-zA-Z0-9@*#]{6,20})$/, "Senha precisa conter: Uma letra maiúscula, uma caractere especial, no mínimo de 6 caracteres e no máximo 20."),
   acceptTerms: Yup.bool()
       .oneOf([true], "Você deve aceitar os termos para continuar."),
   });
@@ -84,29 +85,25 @@ const FormAuth = ({ providers }) => {
           <form onSubmit={handleSubmit(onSubmit)} method="post">
             <div className="w-full max-w-md mr-auto ml-auto mt-4">
               <div className="rounded-md px-8 py-8 mb-4 ml-auto mr-auto">
-                <div className="mb-4">
-                  <label className="block text-violet-900 text-sm font-medium mb-2" htmlFor="email">E-mail</label>
-                  <input                     
-                    className={`shadow-sm appearance-none border rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none focus:border-indigo-300 ${errors.email ? "border-rose-700" : "border-slate-400"}`}
-                    id="email" 
-                    type="text"
-                    name="email"
-                    placeholder="joao@exemplo.com.br"
-                    {...register("email")}
-                  />
-                </div>
-                <div className="text-rose-500 text-xs italic">{errors.email?.message}</div>
-                <div className="mb-6">
-                  <label className="block text-violet-900 text-sm font-medium mb-2" htmlFor="password">Senha</label>
-                  <input  
-                    className={`shadow-sm appearance-none border border-slate-400 rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none focus:border-indigo-300 ${errors.email ? "border-rose-700" : "border-slate-400"}`} 
-                    id="password" 
-                    type="password" 
-                    placeholder="Informe uma senha"
-                    {...register("password")}
-                  />
-                </div>
-                <div className="text-rose-500 text-xs italic">{errors.password?.message}</div>
+                <label className="block text-violet-900 text-sm font-medium mb-2" htmlFor="email">E-mail</label>
+                <input                     
+                  className={`shadow-sm appearance-none border rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none ${errors.email ? "border-rose-700" : "border-slate-400"}`}
+                  id="email" 
+                  type="text"
+                  name="email"
+                  placeholder="joao@exemplo.com.br"
+                  {...register("email")}
+                />
+                <div className="text-rose-500 text-sm italic mt-2 mb-6 font-lato">{errors.email?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errors.email?.message] : null}</div>
+                <label className="block text-violet-900 text-sm font-medium mb-2" htmlFor="password">Senha</label>
+                <input  
+                  className={`shadow-sm appearance-none border border-slate-400 rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none ${errors.email ? "border-rose-700" : "border-slate-400"}`} 
+                  id="password" 
+                  type="password" 
+                  placeholder="Informe uma senha"
+                  {...register("password")}
+                />
+                <div className="text-rose-500 text-sm italic mt-2 font-lato">{errors.password?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errors.password?.message] : null}</div>
                 <div className="mb-6">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="text-center sm:text-left">
