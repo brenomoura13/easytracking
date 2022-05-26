@@ -38,14 +38,10 @@ export default NextAuth({
           const result = await users.findOne({
             email: credentials.email,
           })
-          if (!result) {
-            client.close()
-            throw new Error('Nenhum usuário encontrado com este e-mail.')
-          }
           const checkPassword = await verifyPassword(credentials.password, result.password)
-          if (!checkPassword) {
+          if (!checkPassword || !result) {
             client.close()
-            throw new Error('Senha não confere.')
+            throw new Error('pass_or_email_not_found')
           }
           client.close()
           return { email: result.email }
