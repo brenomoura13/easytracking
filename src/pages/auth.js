@@ -10,7 +10,6 @@ function AuthPage({providers}) {
   const router = useRouter()
   useEffect(() => {
     getSession().then((session) => {
-      console.log(session);
       if (session) {
         router.replace('/logged')
       } else {
