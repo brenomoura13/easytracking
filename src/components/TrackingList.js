@@ -10,18 +10,6 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
-async function CreateUser(email, password) {
-  const response = await fetch("/api/auth/signup", {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-  const data = await response.json()
-  return data
-}
-
 const FormAuth = ({ providers }) => {
   const [errorMsg, setErrorMsg] = useState("")
   const router = useRouter()
@@ -84,7 +72,7 @@ const FormAuth = ({ providers }) => {
         <Image src={"/logo.png"} width={128} height={128}/>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <div className="w-screen max-w-md mt-2">
+        <div className="w-full max-w-md mt-2">
           <div className="rounded-md px-8 py-8 mb-4 ml-auto mr-auto">
             <div className="text-red-500 text-xs md:text-base mt-2 mb-6 font-lato">{errorMsg ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errorMsg] : null}</div>
             <label className="block text-violet-700 text-xs md:text-base font-medium mb-2" htmlFor="email">E-mail:</label>

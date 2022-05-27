@@ -11,6 +11,7 @@ function AuthPage({providers}) {
   useEffect(() => {
     getSession().then((session) => {
       if (session) {
+        console.log(session);
         router.replace('/logged')
       } else {
         setIsLoading(false)
