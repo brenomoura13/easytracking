@@ -12,12 +12,16 @@ async function handler(req, res) {
       { useNewUrlParser: true, useUnifiedTopology: true }
       )
       let db = client.db()
-      const checkExisting = await db
+      const checkOnDB = await db
       .collection('accounts')
-      .findOne({ email: email })
-      if (checkExisting) {
+      .findOne({ email: email, codes: {$exists: true, $nin: [ code ]} })
+      if (checkOnDB) {
         db.collection('accounts').updateOne({ email: email }, { $push: { codes:code } })
         res.status(201).json({ status: 201, message: 'Lista de codigos atualizada com sucesso.' })
+      } else {
+        res.status(409).json({ status: 409, message: 'Código já registrado.' })
+        client.close()
+        return
       }
     } else {
       res.status(500).json({ status: 500, message: 'Rota inválida.' })
