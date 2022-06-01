@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { getProviders } from "next-auth/react"
-import FormAuth from '../components/auth/'
+import FormAuth from '../components/Auth'
 import Loading from '../components/Loading'
 
 function AuthPage({providers}) {
