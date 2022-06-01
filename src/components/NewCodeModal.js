@@ -19,9 +19,12 @@ async function RegisterNewCode(email, code) {
   return data
 }
 
-const NewCodeModal = () => {
+const NewCodeModal = ({setModalState}) => {
   const [alreadyRegisteredMsg, setalreadyRegisteredMsg] = useState('')
-  const [modalIsOpen, setModalIsOpen] = useState(true)
+  const closeModal = (evt) => {
+    evt.preventDefault()
+    setModalState(false)
+  }
   const { data: session } = useSession()
   const email = session?.user.email
   async function registerHandler(event) {
@@ -29,7 +32,7 @@ const NewCodeModal = () => {
     const result = await RegisterNewCode(email, enteredCode)
     switch (result.status) {
     case 201:
-      setModalIsOpen(false)
+      closeModal
       break
     case 409:
       setalreadyRegisteredMsg("Código já registrado.")
@@ -51,41 +54,42 @@ const NewCodeModal = () => {
   }
 
   return (
-    <Dialog open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
-      <div id="NewCodeModal" tabIndex="-1" aria-hidden="true" className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full transition-200`}>
-        <div className="relative p-4 w-full max-w-2xl h-full md:h-auto font-montserrat">
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <div className="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Informe o código
-          </h3>
-          <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="NewCodeModal">
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
+    <Dialog open={true} onClose={()=>{}}>
+      <div id="modal" tabIndex="-1" className="overflow-y-auto overflow-x-hidden top-0 right-0 left-0 z-9999 w-full md:inset-0 h-modal md:h-full">
+        <div className="flex items-center justify-center p-8 w-full h-screen">
+          <div className="relative w-screen md:w-1/3 bg-violet-900 rounded-lg shadow font-montserrat">
+            <div className="flex justify-center items-center p-5 rounded-t border-violet-600">
+              <h3 className="text-xl w-full text-center font-medium underline text-slate-200">
+                Informe o código
+              </h3>
+              <button onClick={closeModal} type="button" className="text-slate-200 bg-transparent hover:bg-violet-600 rounded hover:text-slate-300 text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="modal">
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)} method="put">
+              <div className="w-full flex justify-center items-center">
+                <input                     
+                  className={`shadow-sm appearance-none border rounded w-5/6 py-4 px-3 mt-2 slate-900 text-sm leading-tight focus:outline-none ${errors.code ? "border-rose-700" : "border-slate-400"}`}
+                  id="code" 
+                  type="text"
+                  name="code"
+                  placeholder="AZ123456789AZ"
+                  onChange={() => setalreadyRegisteredMsg("")}
+                  {...register("code")}
+                />
+              </div>
+              <div className="text-amber-400 text-xs md:text-base mt-2 font-lato ml-8 mb-2">{alreadyRegisteredMsg != '' ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Already Registered"} />, alreadyRegisteredMsg] : null}</div>
+              <div className="text-red-500 text-xs md:text-base mt-2 font-lato ml-8 mb-2">{errors.code?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Error"} />, errors.code?.message] : null}</div>
+              <div className="flex w-full justify-center items-center p-6 space-x-2 rounded-b">
+                <button data-modal-toggle="modal" type="submit" className="bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-3/4 hover:bg-tertiary duration-200 transition-all">
+                  Enviar
+                </button>
+              </div>
+            </form>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} method="put">
-            <div className="p-6 space-y-6">
-            <label className="block text-violet-700 text-xs md:text-base font-medium mb-2" htmlFor="email">E-mail:</label>
-              <input                     
-                className={`shadow-sm appearance-none border rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none ${errors.code ? "border-rose-700" : "border-slate-400"}`}
-                id="code" 
-                type="text"
-                name="code"
-                placeholder="joao@exemplo.com.br"
-                {...register("code")}
-              />
-              <div className="text-amber-400 text-xs md:text-base mt-2 font-lato mb-2">{alreadyRegisteredMsg ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Code Already Registered"} />, alreadyRegisteredMsg] : null}</div>
-              <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.code?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Code Error"} />, errors.code?.message] : null}</div>
-            </div>
-            <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-              <button data-modal-toggle="NewCodeModal" type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Inserir</button>
-              <button data-modal-toggle="NewCodeModal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancelar</button>
-            </div>
-          </form>
         </div>
       </div>
-    </div>
-  </Dialog>
+    </Dialog>
   )
 }
 
