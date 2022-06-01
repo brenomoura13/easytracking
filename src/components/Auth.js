@@ -86,7 +86,7 @@ const FormAuth = ({ providers }) => {
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <div className="w-screen max-w-md mt-2">
           <div className="rounded-md px-8 py-8 mb-4 ml-auto mr-auto">
-            <div className="text-red-500 text-xs md:text-base mt-2 mb-6 font-lato">{errorMsg ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errorMsg] : null}</div>
+            <div className="text-red-500 text-xs md:text-base mt-2 mb-6 font-lato">{errorMsg ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Missing Infos"} />, errorMsg] : null}</div>
             <label className="block text-violet-700 text-xs md:text-base font-medium mb-2" htmlFor="email">E-mail:</label>
             <input                     
               className={`shadow-sm appearance-none border rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none ${errors.email ? "border-rose-700" : "border-slate-400"}`}
@@ -96,7 +96,7 @@ const FormAuth = ({ providers }) => {
               placeholder="joao@exemplo.com.br"
               {...register("email")}
             />
-            <div className="text-red-500 text-xs md:text-base mt-2 mb-6 font-lato">{errors.email?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errors.email?.message] : null}</div>
+            <div className="text-red-500 text-xs md:text-base mt-2 mb-6 font-lato">{errors.email?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Email"} />, errors.email?.message] : null}</div>
             <label className="block text-violet-700 text-xs md:text-base font-medium mb-2" htmlFor="password">Senha:</label>
             <input  
               className={`shadow-sm appearance-none border border-slate-400 rounded w-full py-4 px-3 slate-900 text-sm leading-tight focus:outline-none ${errors.email ? "border-rose-700" : "border-slate-400"}`} 
@@ -105,7 +105,7 @@ const FormAuth = ({ providers }) => {
               placeholder="Informe uma senha"
               {...register("password")}
             />
-            <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.password?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errors.password?.message] : null}</div>
+            <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.password?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Password"} />, errors.password?.message] : null}</div>
             <div className="mb-6">
               <div className="text-left">
                 <div className="form-check mb-3">
@@ -118,7 +118,7 @@ const FormAuth = ({ providers }) => {
                     {...register("terms")}/>
                     <p className="font-medium text-xs md:text-sm text-gray-800">Concordo com os<Link href="/auth"><a className="text-violet-600 duration-200 transition-colors hover:text-violet-800"> termos de uso</a></Link></p>
                   </label>
-                  <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.terms?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" />, errors.terms?.message] : null}</div>
+                  <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.terms?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-2" key={"Terms"} />, errors.terms?.message] : null}</div>
                 </div>
               </div>
               <Link href="/auth">
@@ -139,7 +139,7 @@ const FormAuth = ({ providers }) => {
             {Object.values(providers).map((provider) => (
               provider.id === "credentials" ? null : (
                   <button key={provider.id} type="button" className="relative border-solid border shadow-sm border-slate-400
-                  font-semibold text-violet-600 text-sm py-1 text-center rounded text-center w-full
+                  font-semibold text-violet-600 text-sm py-1 rounded text-center w-full
                   focus:outline-none hover:border-violet-600 transition-all duration-200" onClick={() => signIn(provider.id)}>
                     {(() => {
                       switch (provider.id) {
