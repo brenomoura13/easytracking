@@ -21,13 +21,12 @@ async function RegisterNewCode(email, code, name) {
 
 const NewCodeModal = ({setModalState}) => {
   const [isOpen, setIsOpen] = useState(true)
-  const closeModal = (evt) => {
-    evt.preventDefault()
+  const closeModal = () => {
     setModalState(false)
     setIsOpen(false)
   }
 
-  console.log(isOpen);
+
   const { data: session } = useSession()
   const email = session?.user.email
   async function registerHandler(event) {
@@ -36,7 +35,7 @@ const NewCodeModal = ({setModalState}) => {
     const result = await RegisterNewCode(email, enteredCode, enteredName)
     switch (result.status) {
     case 201:
-      closeModal
+      closeModal()
       break
     case 409:
       setalreadyRegisteredMsg("Código já registrado.")
@@ -89,7 +88,7 @@ const NewCodeModal = ({setModalState}) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all font-montserrat">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -98,30 +97,32 @@ const NewCodeModal = ({setModalState}) => {
                   </Dialog.Title>
                   <form onSubmit={handleSubmit(onSubmit)} method="put">
                     <input                     
-                      className={`shadow-sm appearance-none border rounded w-5/6 py-4 px-3 mt-2 slate-900 text-sm leading-tight focus:outline-none ${errors.name ? "border-rose-700" : "border-slate-400"}`}
+                      className={`shadow-sm appearance-none border rounded w-full py-4 px-3 mt-2 slate-900 text-sm leading-tight focus:outline-none ${errors.name ? "border-rose-700" : "border-slate-400"}`}
                       id="name" 
                       type="text"
                       name="name"
                       placeholder="Apelido"
                       {...register("name")}
                     />
-                    <div className="text-red-500 text-xs md:text-base mt-2 font-lato ml-8 mb-2">{errors.name?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Error"} />, errors.name?.message] : null}</div>
+                    <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.name?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Error"} />, errors.name?.message] : null}</div>
                     <input                     
-                      className={`shadow-sm appearance-none border rounded w-5/6 py-4 px-3 mt-2 slate-900 text-sm leading-tight focus:outline-none ${errors.code ? "border-rose-700" : "border-slate-400"}`}
+                      className={`shadow-sm appearance-none border rounded w-full py-4 px-3 mt-2 slate-900 text-sm leading-tight focus:outline-none ${errors.code ? "border-rose-700" : "border-slate-400"}`}
                       id="code" 
                       type="text"
                       name="code"
                       placeholder="Código (Sigla + 9 dígitos + Sigla)"
                       {...register("code")}
                     />
-                    <div className="text-amber-400 text-xs md:text-base mt-2 font-lato ml-8 mb-2">{alreadyRegisteredMsg != '' ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Already Registered"} />, alreadyRegisteredMsg] : null}</div>
-                    <div className="text-red-500 text-xs md:text-base mt-2 font-lato ml-8 mb-2">{errors.code?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Error"} />, errors.code?.message] : null}</div>
-                    <button onClick={closeModal}>
-                      Cancelar
-                    </button>
-                    <button type="submit">
-                      Enviar
-                    </button>            
+                    <div className="text-amber-400 text-xs md:text-base mt-2 font-lato mb-2">{alreadyRegisteredMsg != '' ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Already Registered"} />, alreadyRegisteredMsg] : null}</div>
+                    <div className="text-red-500 text-xs md:text-base mt-2 font-lato mb-2">{errors.code?.message ? [<FontAwesomeIcon icon={faTriangleExclamation} className="mr-1" key={"Code Error"} />, errors.code?.message] : null}</div>                    
+                    <div className="flex items-center justify-center">
+                      <button className="bg-rose-500 hover:bg-rose-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-1/2 hover:bg-tertiary duration-200 transition-all" onClick={closeModal}>
+                        Cancelar
+                      </button>       
+                      <button className="ml-4 bg-violet-500 hover:bg-violet-600 shadow-lg text-white font-semibold text-sm py-3 px-0 rounded text-center w-1/2 hover:bg-tertiary duration-200 transition-all" type="submit">
+                        Enviar
+                      </button>                        
+                    </div>
                   </form>     
                 </Dialog.Panel>
               </Transition.Child>

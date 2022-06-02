@@ -47,7 +47,7 @@ var styles = {
     display: 'inline-block'
   },
   bmOverlay: {
-    background: 'rgba(76, 29, 149, 0.3)'
+    background: 'rgba(0, 0, 0, 0.3)'
   }
 }
 
