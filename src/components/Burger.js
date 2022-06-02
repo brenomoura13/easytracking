@@ -8,6 +8,7 @@ import NewCodeModal from "./NewCodeModal"
 var styles = {
   bmBurgerButton: {
     position: 'fixed',
+    background: 'transparent',
     width: '26px',
     height: '20px',
     left: '36px',
@@ -46,7 +47,7 @@ var styles = {
     display: 'inline-block'
   },
   bmOverlay: {
-    background: 'rgba(0, 0, 0, 0.3)'
+    background: 'rgba(76, 29, 149, 0.3)'
   }
 }
 

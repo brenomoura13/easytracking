@@ -18,9 +18,9 @@ async function handler(req, res) {
       let db = client.db()
       const checkOnDB = await db
       .collection('accounts')
-      .findOne({ email: email, codes: {$exists: true, $nin: [ code ]} })
-      if (checkOnDB) {
-        db.collection('accounts').updateOne({ email: email }, { $push: { codes:{code: code, name: name} } })
+      .findOne({ email: email, codes: { $elemMatch: { code: code } } })
+      if (!checkOnDB) {
+        db.collection('accounts').updateOne({ email: email }, { $push: {codes: {code: code, name: name} } })
         res.status(201).json({ status: 201, message: 'Lista de codigos atualizada com sucesso.' })
       } else {
         res.status(409).json({ status: 409, message: 'Código já registrado.' })
