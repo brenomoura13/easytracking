@@ -1,12 +1,13 @@
-import { getSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import BurgerMenu from "../components/Burger";
 import TrackingList from "../components/TrackingList";
 
-const UserInterface = () => {
+const UserInterface = ({data}) => {
+  console.log(data);
   return (
     <>
       <BurgerMenu />
-      <TrackingList />
+      <TrackingList codeList={data}/>
     </>
   )
 }
@@ -21,8 +22,11 @@ export async function getServerSideProps(context) {
       },
     };
   }
+  const { email } = session.user  
+  const res = await fetch(`http://localhost:3000/api/correios/requestCodeList?email=${email}`)
+  const data = await res.json()
   return {
-    props: { session },
+    props: { session, data },
   };
 }
 
