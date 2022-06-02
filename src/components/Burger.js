@@ -69,7 +69,7 @@ const BurgerMenu = () => {
                 <FontAwesomeIcon icon={faPencil} className="mr-3 text-green-300 w-8" />
                 Novo
               </button>
-              {modalState && <NewCodeModal setModalState={setModalState}/>}
+              {modalState && <NewCodeModal setModalState={setModalState} />}
             </li>
             <li className="mb-6"><FontAwesomeIcon icon={faTimeline} className="mr-3 text-sky-300 w-8" />
               Histórico
