@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTruckFast, faPlaneArrival, faBoxesPacking, faShippingFast, faTruck, faClipboardCheck, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
+import { faPlaneArrival, faBoxesPacking, faShippingFast, faTruck, faClipboardCheck, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
+
+const uri = process.env.NEXTAUTH_URL
 
 function Details({infos}) {
   return (
@@ -60,9 +62,11 @@ function Details({infos}) {
   );
 }
 
+
+
 export async function getServerSideProps(ctx){
   const { code } = ctx.query
-  const res = await fetch(`http://localhost:3000/api/correios/trackingInfos?code=${code}`)
+  const res = await fetch(`${uri}/api/correios/trackingInfos?code=${code}`)
   const data = await res.json()
   const infos = data.details.objetos[0].eventos
   return {

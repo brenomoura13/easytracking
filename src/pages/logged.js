@@ -2,6 +2,8 @@ import { getSession } from "next-auth/react"
 import BurgerMenu from "../components/Burger";
 import TrackingList from "../components/TrackingList";
 
+const uri = process.env.NEXTAUTH_URL
+
 const UserInterface = ({data}) => {
   return (
     <>
@@ -22,7 +24,7 @@ export async function getServerSideProps(context) {
     };
   }
   const { email } = session.user  
-  const res = await fetch(`http://localhost:3000/api/correios/requestCodeList?email=${email}`)
+  const res = await fetch(`${uri}/api/correios/requestCodeList?email=${email}`)
   const data = await res.json()
   return {
     props: { session, data },
