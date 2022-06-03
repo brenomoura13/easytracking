@@ -1,9 +1,8 @@
-import { getSession, useSession } from "next-auth/react"
+import { getSession } from "next-auth/react"
 import BurgerMenu from "../components/Burger";
 import TrackingList from "../components/TrackingList";
 
 const UserInterface = ({data}) => {
-  console.log(data);
   return (
     <>
       <BurgerMenu />
