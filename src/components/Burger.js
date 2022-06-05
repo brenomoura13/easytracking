@@ -1,6 +1,7 @@
 import { faBoxOpen, faPencil, faTimeline, faArrowRightFromBracket, faInfo, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { signOut } from "next-auth/react"
+import Link from "next/link"
 import { useState } from "react"
 import { elastic as Menu } from 'react-burger-menu'
 import NewCodeModal from "./NewCodeModal"
@@ -61,9 +62,13 @@ const BurgerMenu = () => {
             <li className="mb-6"><FontAwesomeIcon icon={faUser} className="mr-3 text-teal-300 w-8" />
               Sua conta
             </li>
-            <li className="mb-6"><FontAwesomeIcon icon={faBoxOpen} className="mr-3 text-orange-300 w-8" />
-              Encomendas
-            </li>
+            <button>
+              <Link href="/logged" passHref>
+                <li className="mb-6"><FontAwesomeIcon icon={faBoxOpen} className="mr-3 text-orange-300 w-8" />
+                  Encomendas
+                </li>
+              </Link>
+            </button>
             <li className="mb-6">
               <button onClick={() => {setModalState(!modalState)} }>
                 <FontAwesomeIcon icon={faPencil} className="mr-3 text-green-300 w-8" />

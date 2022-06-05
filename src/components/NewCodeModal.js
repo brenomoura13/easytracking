@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { useSession } from "next-auth/react"
 import { useState, Fragment } from "react"
 import { Dialog, Transition } from "@headlessui/react"
+import { useRouter } from "next/router"
 
 async function RegisterNewCode(email, code, name) {
   const response = await fetch("/api/correios/updateCodeList", {
@@ -22,10 +23,11 @@ async function RegisterNewCode(email, code, name) {
 const NewCodeModal = ({setModalState}) => {
   const [isOpen, setIsOpen] = useState(true)
   const closeModal = () => {
-    setModalState(false)
     setIsOpen(false)
   }
 
+  const router = useRouter()
+  const refreshData = () => router.replace(router.asPath)
 
   const { data: session } = useSession()
   const email = session?.user.email
@@ -36,6 +38,7 @@ const NewCodeModal = ({setModalState}) => {
     switch (result.status) {
     case 201:
       closeModal()
+      refreshData()
       break
     case 409:
       setalreadyRegisteredMsg("Código já registrado.")

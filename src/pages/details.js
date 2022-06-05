@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlaneArrival, faBoxesPacking, faShippingFast, faTruck, faClipboardCheck, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
+import BurgerMenu from "../components/Burger"
 
 const uri = process.env.NEXTAUTH_URL
 
 function Details({infos}) {
   return (
     <>
+    <BurgerMenu />
     <div className="w-full px-4 mt-20">
       {infos.map((info) => (
         <div className="rounded-lg mt-2 border pb-6 border-gray-200 font-montserrat" key={info.dtHrCriado}>
@@ -17,7 +19,6 @@ function Details({infos}) {
                     <div className="flex items-center">
                       <div className="bg-slate-100 text-violet-600 rounded-sm w-12 text-center text-2xl p-2.5">
                         <FontAwesomeIcon icon={(() => {
-                          console.log(info.unidade?.endereco);
                           switch (info.descricao) {
                             case 'Objeto postado': {
                               return faBoxesPacking 
@@ -59,7 +60,7 @@ function Details({infos}) {
     ))}
     </div>
   </>
-  );
+  )
 }
 
 
@@ -76,4 +77,4 @@ export async function getServerSideProps(ctx){
   }
 }
 
-export default Details;
+export default Details
