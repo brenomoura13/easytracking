@@ -4,12 +4,13 @@ import BurgerMenu from "../components/Burger"
 
 const uri = process.env.NEXTAUTH_URL
 
-function Details({infos}) {
+function Details({data}) {
+  console.log(data.details[0].eventos)
   return (
     <>
     <BurgerMenu />
     <div className="w-full px-4 mt-20">
-      {infos.map((info) => (
+      {data.details[0].eventos.map((info) => (
         <div className="rounded-lg mt-2 border pb-6 border-gray-200 font-montserrat" key={info.dtHrCriado}>
           <div className="px-6 pt-6 overflow-x-auto">
             <table className="w-full whitespace-nowrap">
@@ -69,10 +70,9 @@ export async function getServerSideProps(ctx){
   const { code } = ctx.query
   const res = await fetch(`${uri}/api/correios/trackingInfos?code=${code}`)
   const data = await res.json()
-  const infos = data.details.objetos[0].eventos
   return {
     props:{
-      infos
+      data
     }
   }
 }
